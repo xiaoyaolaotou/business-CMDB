@@ -1,0 +1,160 @@
+{% extends 'master/master.html' %}
+
+{% block breadcrumb %}
+<li><a href="#">资源管理</a><span class="divider"></span></li>
+<li class="active">业务列表</li>
+{% endblock %}
+
+{% block body %}
+        <form class="form-inline">
+  <div class="form-group">
+    <div class="input-group">
+      <input type="text" class="form-control" id="exampleInputAmount" name="search"  placeholder="IP地址/应用名称">
+    </div>
+  </div>
+  <button type="submit" class="btn btn-primary">搜索</button>
+            {% if perms.product.add_bussiness %}
+            <a class="btn  btn-success" href="{% url 'add_idc' %}">添加业务</a>
+            {% endif %}
+
+</form>
+
+
+    <table id="dataTables" class="table table-condensed">
+
+    <thead>
+
+        <tr>
+            <td>业务IP</td>
+            <td>物理IP</td>
+            <td>应用名称</td>
+            <td>应用端口</td>
+            <td>业务用途</td>
+            <td>业务线</td>
+            <td>是否负载</td>
+            <td>创建时间</td>
+{#            <td>更新时间</td>#}
+            <td>负责人</td>
+            <td>备注</td>
+            {% if perms.product.add_idc %}
+            <td>操作</td>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+    {% for idc_obj in object_list %}
+        <tr>
+            <td>{{ idc_obj.virIP }}</td>
+            <td>{{ idc_obj.physicalIP }}</td>
+            <td>{{ idc_obj.application }}</td>
+            <td>{{ idc_obj.port }}</td>
+            <td>{{ idc_obj.component }}</td>
+            <td>{{ idc_obj.Bussiness_idc.name }}</td>
+            <td>{{ idc_obj.get_lalancing_choices_display }}</td>
+            <td>{{ idc_obj.ctime |date:"Y-m-d H:i" }}</td>
+{#            <td>{{ idc_obj.uptime }}</td>#}
+            <td>{{ idc_obj.principal }}</td>
+            <td>{{ idc_obj.note }}</td>
+            {% if perms.product.add_idc %}
+            <td>
+                <div class="btn-group">
+                <a href="{% url 'update_idc' %}?id={{ idc_obj.id }}" class="btn btn-primary btn-sm ye-update" data-id="{{ idc_obj.id }}">修改</a>
+                <button class="btn btn-danger btn-sm ye-del" data-id="{{ idc_obj.id }}">删除</button>
+                    </div>
+            </td>
+        {% endif %}
+        </tr>
+    {% endfor %}
+    </tbody>
+
+    </table>
+
+    <!--分页 -->
+    <div>
+    <center>
+        <ul class="pagination">
+         <li><a href="{% url 'idc_list' %}?page=1">首页</a></li>
+            {% if page_obj.has_previous %}
+                <li><a href="{% url 'idc_list' %}?page={{ page_obj.previous_page_number }}">上一页</a></li>
+        {% endif %}
+
+            {% for p in page_obj.paginator.page_range %}
+
+                {% if p == page_obj.number %}
+                    <li class="active"><a href="{% url 'idc_list' %}?page={{ p }}">{{ p }}</a></li>
+                {% else %}
+                    <li><a href="{% url 'idc_list' %}?page={{ p }}">{{ p }}</a></li>
+                {% endif %}
+            {% endfor %}
+
+         {% if page_obj.has_next %}
+                <li><a href="{% url 'idc_list' %}?page={{ page_obj.next_page_number }}">下一页</a></li>
+        {% endif %}
+
+         <li><a href="{% url 'idc_list' %}?page={{ page_obj.paginator.num_pages }}">末页</a></li>
+        </ul>
+    </center>
+    </div>
+
+{% endblock %}
+
+
+{% block js %}
+<script>
+
+    $(function () {
+        $.ajaxSetup({
+            beforeSend:function (xhr,settings) {
+                //xhr代指 XMLHttpRequest对象，
+                xhr.setRequestHeader('X-CSRFtoken',$.cookie('csrftoken'));
+            }
+        });
+        //删除业务
+        $('.ye-del').click(function () {
+            var delyewu = $(this).attr('data-id');
+            //console.log(delyewu)
+            $.ajax({
+                url:"{% url 'add_idc' %}",
+                type:'delete',
+                data:{'dataid':delyewu},
+                success:function (data) {
+                    //console.log(data)
+                    if(data.status==0){
+                            swal({
+                            "title": "业务线删除成功",
+                            "text": "",
+                            "type": "success"
+                            },function () {
+                                setTimeout(function () {
+                                    location.reload()
+                                },200)
+                            });
+
+
+                        }else {
+                            swal("操作失败", data.errmsg, "error");
+                            //console.log('failed')
+                        }
+                }
+            })
+        });
+
+
+
+        //更新业务
+
+{#        $('.ye-update').click(function () {#}
+{#           var update_yewu = $(this).attr('data-id');#}
+{#            //console.log(update_yewu)#}
+{#            $.ajax({#}
+{#                url:"{% url 'add_idc' %}",#}
+{#                type:'put',#}
+{#                data:{'update_yewu':update_yewu},#}
+{#                success:function (data) {#}
+{#                    console.log(data)#}
+{#                }#}
+{#            })#}
+{#        })#}
+    })
+</script>
+{% endblock %}

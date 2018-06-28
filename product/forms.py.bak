@@ -1,0 +1,46 @@
+from . import models
+from django import forms
+
+class CreateIdcForm(forms.Form):
+    """验证添加业务系统"""
+    virIP   = forms.GenericIPAddressField(required=True,error_messages={
+        'required':'此项不能为空',
+        'invalid':'该IP地址无效'
+    })
+
+    physicalIP = forms.GenericIPAddressField(required=False)
+
+    application = forms.CharField(required=True,error_messages={
+        'required':'此项不能为空',
+    })
+
+    port    = forms.CharField(required=True,error_messages={
+        'required': '此项不能为空',
+    })
+
+    component   = forms.CharField(required=True,error_messages={
+        'required': '此项不能为空',
+    })
+
+    yewuxian    = forms.ChoiceField(required=True,error_messages={
+        'required': '此项必选项',
+    })
+
+    yewuhuanjing    = forms.ChoiceField(required=True,error_messages={
+        'required': '此项必选项',
+    })
+
+    fuzai    = forms.ChoiceField(required=True,error_messages={
+        'required': '此项必选项',
+    })
+
+    principal   = forms.CharField(required=True,error_messages={
+        'required': '此项不能为空',
+    })
+
+    note    = forms.CharField(required=False)
+
+
+
+
+

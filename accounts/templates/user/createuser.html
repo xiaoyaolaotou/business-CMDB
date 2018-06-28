@@ -1,0 +1,104 @@
+{% extends 'master/master.html' %}
+
+
+{% block breadcrumb %}
+        <li><a href="{% url 'user_list' %}">用户列表</a><span class="divider"></span></li>
+        <li class="active">用户创建</li>
+{% endblock %}
+
+
+
+{% block body %}
+    <div class="container">
+        <form id="from_create_user" method="post">
+        {% csrf_token %}
+        <label>用户名:</label>
+{#            <input type="text" id="username" name="username" class="form-control" placeholder="用户名">#}
+            {{ obj.username }}
+            <span style="color:red" id="usererr">{{ obj.errors.username.0 }}</span><br>
+        <label>中文名:</label>
+{#            <input type="text" id="username_zh" name="username_zh" class="form-control" placeholder="中文名/可以为空">#}
+            {{ obj.username_zh }}
+            <span  style="color:red" ></span><br>
+
+        <label>密码:</label>
+{#            <input type="password" id="password" name="password" class="form-control" placeholder="密码">#}
+                {{ obj.password }}
+        <label>确认密码:</label>
+{#            <input type="password" id="re_password" name="re_password" class="form-control" placeholder="确认密码">#}
+            {{ obj.re_password }}
+            <span style="color:red" id="passerr">{{ obj.errors.re_password.0 }}</span><br>
+
+        <label>邮箱:</label>
+{#            <input type="email" id="email" name="email" class="form-control" placeholder="邮箱">#}
+            {{ obj.email }}
+            <span style="color:red" id="emailerr">{{ obj.errors.email.0 }}</span><br>
+
+            <button type="submit" class="btn btn-primary btn-block btn-flat create_user">创建</button>
+
+    </form>
+    </div>
+
+
+
+
+{% endblock %}
+
+{% block js %}
+<script>
+$(function () {
+
+    $.ajaxSetup({
+        beforeSend:function (xhr,settings) {
+            //xhr代指 XMLHttpRequest对象，
+            xhr.setRequestHeader('X-CSRFtoken',$.cookie('csrftoken'));
+        }
+    });
+
+    //添加用户
+{#    $('.create_user').click(function () {#}
+{#        $.ajax({#}
+{#            url:"{% url 'create_user' %}",#}
+{#            type:'post',#}
+{#            data:$('#from_create_user').serialize(),#}
+{#            success:function (data) {#}
+{#                //var dataid = JSON.parse(data)#}
+{#                //console.log(data)#}
+{##}
+{#                //console.log(typep);#}
+{#                if(data.status == 0){#}
+{#                    swal({#}
+{#                            "title": "用户创建成功",#}
+{#                            "text": "",#}
+{#                            "type": "success"#}
+{#                    },function () {#}
+{#                        setTimeout(function () {#}
+{#                            window.location.reload()#}
+{#                        },300)#}
+{#                    });#}
+{#                }else {#}
+{#                    var error = data.errmsg;#}
+{#                    var dataerror = JSON.parse(error); //转换成json格式#}
+{#                    console.log(dataerror.re_password[0].message);#}
+{##}
+{##}
+{#                    var username_error = (dataerror.username)[0].message; //获取用户名的错误信息#}
+{#                    $('#usererr').text(username_error);#}
+{##}
+{#                    //var password_error = (dataerror.re_password)[0].message; //获取两次密码是否一致#}
+{#                    var password_error = dataerror.re_password[0].message; //获取两次密码是否一致#}
+{#                    console.log(password_error);#}
+{#                    $('#passerr').text(password_error);#}
+{##}
+{#                    var email_error = (dataerror.email)[0].message; //获取邮箱是否正确#}
+{#                    //console.log(email_error)#}
+{#                    $('#emailerr').text(email_error);#}
+{##}
+{#                }#}
+{#            }#}
+{#        })#}
+{#    })#}
+
+})
+</script>
+{% endblock %}

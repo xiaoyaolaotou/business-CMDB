@@ -1,0 +1,130 @@
+{% extends 'master/master.html' %}
+
+{% block breadcrumb %}
+<li><a href="#">资源管理</a><span class="divider"></span></li>
+<li class="active">业务添加</li>
+{% endblock %}
+
+
+{% block body %}
+    <form class="form-horizontal" id="basicvalidations" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="name" class="col-sm-2 control-label">业务IP *</label>
+            <div class="col-sm-8">
+                {{ obj.virIP }} <span style="color: red">{{ obj.errors.virIP.0 }}</span>
+
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="name" class="col-sm-2 control-label">物理IP * </label>
+            <div class="col-sm-8">
+                {{ obj.physicalIP }} <span style="color: red">{{ obj.errors.physicalIP.0 }}</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="name" class="col-sm-2 control-label">应用名称 *</label>
+            <div class="col-sm-8">
+                {{ obj.application }} <span style="color: red">{{ obj.errors.application.0 }}</span>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label for="name" class="col-sm-2 control-label">应用端口 *</label>
+            <div class="col-sm-8">
+                {{ obj.port }} <span style="color: red">{{ obj.errors.port.0 }}</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="name" class="col-sm-2 control-label">业务用途 *</label>
+            <div class="col-sm-8">
+               {{ obj.component }} <span style="color: red">{{ obj.errors.component.0 }}</span>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label for="name" class="col-sm-2 control-label">业务线 *</label>
+            <div class="col-sm-8">
+{#                <select name="yewuxian">#}
+{#                    {% for i in u %}#}
+{#                    <option value="{{ i.id }}">{{ i.Bussiness_idc_id }}</option>#}
+{#                    {% endfor %}#}
+{#                </select>#}
+                {{ obj.Bussiness_idc }}
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            <label for="name" class="col-sm-2 control-label">负载均衡 *</label>
+            <div class="col-sm-8">
+{#                <select name="fuzai">#}
+{#                    <option value="1">是</option>#}
+{#                </select>#}
+                {{ obj.fuzai }}
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label for="name" class="col-sm-2 control-label">开发负责人 *</label>
+            <div class="col-sm-8">
+                {{ obj.principal }} <span style="color: red">{{ obj.errors.principal.0 }}</span>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label for="name" class="col-sm-2 control-label">备注</label>
+            <div class="col-sm-8">
+                {{ obj.note }}
+
+            </div>
+        </div>
+
+        <div class="form-group form-footer">
+            <div class="col-sm-offset-2 col-sm-4">
+                <button type="submit" class="btn btn-primary create_idclist">提交</button>
+                <button type="reset" class="btn btn-default">重置</button>
+            </div>
+        </div>
+
+    </form>
+
+
+
+{% endblock %}
+
+
+{% block js %}
+<script>
+    $(function () {
+        $.ajaxSetup({
+            beforeSend:function (xhr,settings) {
+                //xhr代指 XMLHttpRequest对象，
+                xhr.setRequestHeader('X-CSRFtoken',$.cookie('csrftoken'));
+            }
+        });
+
+        //添加业务系统
+{#        $('.create_idclist').click(function () {#}
+{#            $.ajax({#}
+{#                url:"{% url 'add_idc' %}",#}
+{#                type:'post',#}
+{#                data:$('.form-horizontal').serialize(),#}
+{#                success:function (data) {#}
+{#                    console.log(data)#}
+{##}
+{#                }#}
+{#            })#}
+{#        })#}
+    })
+</script>
+{% endblock %}

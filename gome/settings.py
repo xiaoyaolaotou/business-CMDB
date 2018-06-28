@@ -25,7 +25,8 @@ SECRET_KEY = '_(*87-zokz4sbx_h=2(w-x83fs7*o5z9s3)gung1^ch5zc$1gf'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+LOGIN_URL = '/accounts/login/'
 
 
 # Application definition
@@ -37,6 +38,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'dashboard',
+    'accounts',
+    'product'
+
+
 ]
 
 MIDDLEWARE = [
@@ -73,13 +79,25 @@ WSGI_APPLICATION = 'gome.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        #'ENGINE': 'django.db.backends.sqlite3',
+        #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'devops',
+        'USER': 'wduser',
+        'PASSWORD': '87Aies-Xt',
+        'HOST': '192.168.1.100',
+        'PORT': 3306,
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -121,6 +139,11 @@ STATIC_URL = '/static/'
 
 TEMPLATE_DIRS = (os.path.join(BASE_DIR,  'templates'),)
 
+
+AUTH_USER_MODEL = 'accounts.UserInfo'
+
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR,'static'),
 )
+
+SESSION_COOKIE_AGE = 86400 #设置过期时间

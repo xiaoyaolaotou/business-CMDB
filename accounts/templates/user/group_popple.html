@@ -1,0 +1,80 @@
+{% extends 'master/master.html' %}
+
+{% block breadcrumb %}
+
+{% endblock %}
+
+
+{% block body %}
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <td>#</td>
+                <td>组成员</td>
+                <td>操作</td>
+            </tr>
+        </thead>
+        <tbody>
+        {% for groupid in groupid %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ groupid }}</td>
+                <td>
+                    <button class="btn btn-danger" data="{{ groupid.id }}" data_group_id="{{ g.id }}">删除</button>
+                </td>
+            </tr>
+        {% endfor %}
+
+
+
+        </tbody>
+    </table>
+
+
+{% endblock %}
+
+{% block js %}
+<script>
+$(function () {
+            //csrftoken
+            $.ajaxSetup({
+                beforeSend:function (xhr,settings) {
+                //xhr代指 XMLHttpRequest对象，
+                xhr.setRequestHeader('X-CSRFtoken',$.cookie('csrftoken'));
+            }
+        });
+
+    //删除组内的用户
+    $('.btn-danger').click(function () {
+            var uid = $(this).attr('data');
+            var gid = $(this).attr('data_group_id');
+
+
+            $.ajax({
+                url:"{% url 'group_select' %}",
+                type:'delete',
+                data:{'uid':uid,'gid':gid},
+                success:function (data) {
+                    if(data.status==0){
+                        swal({
+                            "title":'用户删除成功',
+                            "text":"",
+                            "type":"success"
+                        },function () {
+                            setTimeout(function () {
+                                window.location.reload()
+                            },200)
+                        })
+                    }else {
+                        swal("操作失败", data.errmsg, "error");
+                    }
+                }
+            })
+    })
+
+})
+</script>
+
+
+{% endblock %}

@@ -1,0 +1,80 @@
+
+{% extends "master/master.html" %}
+
+{% block breadcrumb %}
+    <li><a href="#">用户管理</a><span class="divider"></span></li>
+    <li class="active">权限列表</li>
+{% endblock %}
+
+
+
+{% block body %}
+
+
+    <table class="table table-striped">
+    {% if perms.auth.add_permission %}
+    <caption>
+        <a href="{% url 'permission_create' %}" class="btn btn-primary">创建权限</a>
+    </caption>
+    {% endif %}
+        <thead>
+            <tr>
+                <td>#</td>
+                <td>app</td>
+                <td>model</td>
+                <td>codename</td>
+                <td>name</td>
+                {% if perms.auth.change_permission %}
+                <td>操作</td>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for permission in object_list %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ permission.content_type.app_label }}</td>
+                <td>{{ permission.content_type.model }}</td>
+                <td>{{ permission.codename }}</td>
+                <td>{{ permission.name }}</td>
+                {% if perms.auth.change_permission %}
+                <td>
+                    <button class="btn btn-primary">修改</button>
+                </td>
+                {% endif %}
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+
+    <!--分页 -->
+    <div>
+    <center>
+        <ul class="pagination">
+         <li><a href="{% url 'permission_list' %}?page=1">首页</a></li>
+            {% if page_obj.has_previous %}
+                <li><a href="{% url 'permission_list' %}?page={{ page_obj.previous_page_number }}">上一页</a></li>
+        {% endif %}
+
+            {% for p in paginator.page_range %}
+
+                {% if p == page_obj.number %}
+                    <li class="active"><a href="{% url 'permission_list' %}?page={{ p }}">{{ p }}</a></li>
+                {% else %}
+                    <li><a href="{% url 'permission_list' %}?page={{ p }}">{{ p }}</a></li>
+                {% endif %}
+            {% endfor %}
+
+         {% if page_obj.has_next %}
+                <li><a href="{% url 'permission_list' %}?page={{ page_obj.next_page_number }}">下一页</a></li>
+        {% endif %}
+
+         <li><a href="{% url 'permission_list' %}?page={{ page_obj.paginator.num_pages }}">末页</a></li>
+        </ul>
+    </center>
+    </div>
+
+{% endblock %}
