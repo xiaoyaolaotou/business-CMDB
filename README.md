@@ -1,7 +1,10 @@
 # CMDB业务型管理系统,目前开发阶段
 ##权限
+
 Django自带权限
+
 ##环境
+
 前端:
 
  jquery.js  bootstrap
